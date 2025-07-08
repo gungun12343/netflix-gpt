@@ -3,14 +3,12 @@ import Header from "./Header";
 import { checkValidData } from "../utils/validate";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "../utils/firebase";
-import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addUser } from "../utils/userSlice";
 
 const Login = () => {
     const [isLoginForm, setIsLoginForm] = useState(true);
     const [errorMsg, setErrorMsg] = useState(null);
-    const navigate = useNavigate();
     const dispatch = useDispatch();
     
     const name = useRef(null);
@@ -30,13 +28,11 @@ const Login = () => {
             createUserWithEmailAndPassword(auth, email.current.value, password.current.value)
             .then((userCredential) => {
                 const user = userCredential.user;
-                console.log(user);
                 updateProfile(user, {
                     displayName: name.current.value, photoURL: "https://example.com/jane-q-user/profile.jpg"
                     }).then(() => {
                         const { uid, email, displayName } = auth.currentUser;
                         dispatch(addUser({uid:uid, email:email, displayName:displayName}));
-                        navigate("/browse");
                     }).catch((error) => {
                         setErrorMsg(error.message);
                     });
@@ -51,8 +47,6 @@ const Login = () => {
             signInWithEmailAndPassword(auth, email.current.value, password.current.value)
             .then((userCredential) => {
                 const user = userCredential.user;
-                console.log("successfully signed in");
-                navigate("/browse");
             })
             .catch((error) => {
                 const errorCode = error.code;

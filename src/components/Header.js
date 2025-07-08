@@ -1,18 +1,43 @@
 import { signOut } from "firebase/auth";
 import { auth } from "../utils/firebase";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useState } from "react";
+import { onAuthStateChanged } from "firebase/auth";
+import { useEffect } from "react";
+import { addUser, removeUser } from "../utils/userSlice";
+import { LOGO, USER_AVATAR } from "../utils/constants";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
 
 const Header = () => {
+    const [isOpen, setIsOpen] = useState(false);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const user = useSelector((store) => store.user);
+
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+            if (user) {
+                const { uid, email, displayName } = user;
+                dispatch(addUser({uid:uid, email:email, displayName:displayName}));
+                navigate("/browse");
+            } else {
+                dispatch(removeUser());
+                navigate("/");
+            }
+        });
+
+        return () => unsubscribe();
+    }, []);
+
+    const toggle = () => {
+        setIsOpen(!isOpen);
+    }
 
     const handleSignOut = () => {
         signOut(auth).then(() => {
-            // Sign-out successful.
-            navigate("/");
         }).catch((error) => {
-            // An error happened.
         });
     }
 
@@ -20,15 +45,26 @@ const Header = () => {
         <div className="absolute w-screen px-8 py-3 bg-gradient-to-b from-black z-10 flex justify-between items-center">
             <img 
                 className="w-40" 
-                src="https://help.nflxext.com/helpcenter/OneTrust/oneTrust_production/consent/87b6a5c0-0104-4e96-a291-092c11350111/01938dc4-59b3-7bbc-b635-c4131030e85f/logos/dd6b162f-1a32-456a-9cfe-897231c7763c/4345ea78-053c-46d2-b11e-09adaef973dc/Netflix_Logo_PMS.png" 
+                src={LOGO} 
             />
 
-            {user !== null ?
-            <div className="flex">
-                <img className="w-8 h-8" src="https://wallpapers.com/images/hd/netflix-profile-pictures-1000-x-1000-qo9h82134t9nv0j0.jpg" />
-                <span className="ml-2">{user.displayName}</span>
-                <button onClick={handleSignOut} className="font-bold text-white ml-2">Sign Out</button>
-            </div>: ""}
+            {user !== null &&
+            <div className="flex flex-col">
+                <div onClick={toggle} className="flex items-center mr-10 cursor-pointer">
+                    <img className="w-10 h-10 cursor-pointer" src={USER_AVATAR} />
+                    <FontAwesomeIcon icon={faCaretDown} className="ml-2 text-white" />
+                </div>
+
+                {isOpen && 
+                <div className="flex gap-2 flex-col bg-black absolute mt-16 right-4 p-3">
+                    <p className="text-white border-b border-gray-500">{user.displayName}</p>
+                    <p className="text-white border-b border-gray-500">Manage profiles</p>
+                    <p className="text-white border-b border-gray-500">Your Account</p>
+                    <p className="text-white border-b border-gray-500">Help center</p>
+                    <button onClick={handleSignOut} className="font-bold text-white">Sign Out of Netflix</button>
+                </div>}
+                
+            </div>}
         </div>
     )
 }
