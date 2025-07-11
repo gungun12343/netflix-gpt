@@ -66,15 +66,15 @@ const Login = () => {
             <Header />
 
             <div className="absolute m-auto">
-                <img src={BG_URL} />
+                <img className="h-screen object-cover w-screen" src={BG_URL} />
             </div>
 
-            <form onSubmit={(e) => e.preventDefault()} className="bg-black bg-opacity-80 absolute flex flex-col gap-4 my-36 mx-auto left-0 right-0 w-1/3 p-8">
+            <form onSubmit={(e) => e.preventDefault()} className="bg-black bg-opacity-80 absolute flex flex-col gap-4 my-36 mx-auto left-0 right-0 w-2/3 md:w-1/3 p-8">
                 <h2 className="text-white text-3xl font-bold">{isLoginForm ? "Sign In" : "Sign Up"}</h2>
 
                 {!isLoginForm ? <input ref={name} className="bg-black border border-gray-600 p-3 rounded-md text-white" placeholder="Full Name" /> : ""}
 
-                <input type="text" ref={email} placeholder="Email or mobile number" className="bg-black border border-gray-600 p-3 rounded-md text-white" />
+                <input type="text" ref={email} placeholder="Email address" className="bg-black border border-gray-600 p-3 rounded-md text-white" />
 
                 <input type="password" ref={password} placeholder="Password" className="bg-black border border-gray-600 p-3 rounded-md text-white" />
 

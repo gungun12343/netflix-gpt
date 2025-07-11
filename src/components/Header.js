@@ -53,14 +53,14 @@ const Header = () => {
     }
 
     return (
-        <div className="absolute w-screen px-8 py-3 bg-gradient-to-b from-black z-10 flex justify-between items-center">
+        <div className="absolute w-screen px-8 py-3 bg-gradient-to-b from-black z-10 flex flex-col md:flex-row items-center justify-between">
             <img 
                 className="w-40" 
                 src={LOGO} 
             />
 
             {user !== null &&
-            <div className="flex">
+            <div className="flex w-full justify-between md:w-auto">
 
                 { showGptSearch && 
                 <select className="bg-gray-900 text-white px-2 mr-3 border border-gray-500 rounded-md cursor-pointer"
@@ -71,16 +71,17 @@ const Header = () => {
                 </select>}
 
                 <button onClick={handleGptSearchClick} className="mr-2 bg-white text-black text-lg font-bold py-1 px-4 rounded-md">
-                    {showGptSearch ? "Homepage" : "Search movies"}
+                    {showGptSearch ? "Homepage" : "Search"}
                 </button>
                 
                 <div onClick={toggle} className="flex items-center mr-10 cursor-pointer">
                     <img className="w-10 h-10 cursor-pointer" src={USER_AVATAR} />
-                    <FontAwesomeIcon icon={faCaretDown} className="ml-2 text-white" />
+                    <FontAwesomeIcon icon={faCaretDown} className="ml-2 text-white invisible md:visible" />
+                    <button onClick={handleSignOut} className="md:invisible font-bold text-white">Sign Out</button>
                 </div>
 
                 {isOpen && 
-                <div className="flex gap-2 flex-col bg-black absolute mt-16 right-4 p-3">
+                <div className="invisible md:visible flex gap-2 flex-col bg-black absolute mt-16 right-4 p-3 z-50">
                     <p className="text-white border-b border-gray-500">{user.displayName}</p>
                     <p className="text-white border-b border-gray-500">Manage profiles</p>
                     <p className="text-white border-b border-gray-500">Your Account</p>

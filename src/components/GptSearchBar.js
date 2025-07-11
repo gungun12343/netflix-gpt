@@ -22,7 +22,7 @@ export const GptSearchBar = () => {
     return (
         <div className="pt-[10%] flex justify-center">
             
-            <form className="bg-black text-white flex flex-col px-14 gap-3 w-1/2 py-7"
+            <form className="bg-black text-white flex flex-col items-start mx-5 px-14 gap-3 w-full md:w-1/2 py-7"
                 onSubmit={(e) => e.preventDefault()}>
                 <p>{lang[language].para}</p>
                 <input ref={searchText} className="bg-zinc-700 w-full p-2 rounded-md" placeholder={lang[language].gptSearchPlaceholder} type="text" />

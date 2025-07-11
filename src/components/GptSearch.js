@@ -12,11 +12,13 @@ export const GptSearch = () => {
     }, [])
 
     return (
-        <div>
+        <>
             <div className="absolute m-auto -z-10">
-                            <img src={BG_URL} />
-                        </div>
-            <GptSearchBar />
-        </div>
+                <img className="h-screen object-cover w-screen" src={BG_URL} />
+            </div>
+            <div className="pt-[30%] md:pt-0">
+                <GptSearchBar />
+            </div>
+        </>
     )
 }
