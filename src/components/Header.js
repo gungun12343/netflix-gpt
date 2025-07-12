@@ -1,6 +1,6 @@
 import { signOut } from "firebase/auth";
 import { auth } from "../utils/firebase";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
@@ -16,6 +16,7 @@ const Header = () => {
     const [isOpen, setIsOpen] = useState(false);
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const location = useLocation();
     const user = useSelector((store) => store.user);
     const showGptSearch = useSelector((store) => store.gpt?.showGptSearch);
 
@@ -24,7 +25,10 @@ const Header = () => {
             if (user) {
                 const { uid, email, displayName } = user;
                 dispatch(addUser({uid:uid, email:email, displayName:displayName}));
-                navigate("/browse");
+                // navigate("/browse");
+                if (location.pathname === "/") {
+                    navigate("/browse");
+                }
             } else {
                 dispatch(removeUser());
                 navigate("/");
